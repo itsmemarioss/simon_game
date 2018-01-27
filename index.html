@@ -1,0 +1,146 @@
+<!--
+   index.html
+   
+   Copyright 2017 Mario Santos Sousa <mario@mario-ubuntu>
+   
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+   MA 02110-1301, USA.
+   
+   
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<title>Simon Game</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	
+	<link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+	
+
+	<style>
+		
+		* {
+			font-family: 'Indie Flower', cursive;
+			text-align: center;
+		}
+
+		#by{
+			margin-top: 15px;
+		}
+
+		#main{
+			position: relative;
+			margin: auto;
+			
+			height: 416px;
+			width: 416px;
+		}
+
+		#wrap{
+			position: relative;
+			
+		}
+
+		#top{
+
+		}
+
+		#bottom{
+			
+		}
+
+		#first{
+			background-color: blue;
+			border-top-left-radius: 100%;
+		}
+
+		#second{
+			background-color: yellow;
+			border-top-right-radius: 100%;
+		}
+
+		#third{
+			background-color: red;
+			border-bottom-left-radius: 100%;
+		}
+
+		#fourth{
+			background-color: green;
+			border-bottom-right-radius: 100%;
+		}
+
+		
+
+		.area{
+			height: 160px;
+			width: 160px;
+			display: inline-block;
+			border: 10px solid;
+		}
+		
+		#center{
+			border-radius: 100%;
+			position: absolute;
+			
+			top: 94px;
+			left: 116px;
+			
+			background-color: white;
+			
+		}
+		
+
+	</style>
+</head>
+
+<body>
+	<div id="main">
+
+		<div id="wrap">
+			<div class="top">
+				<div id="first" class="area"></div>
+				<div id="second" class="area"></div>	
+			</div>
+			<div class="bottom">
+				<div id="third" class="area"></div>
+				<div id="fourth" class="area"></div>	
+			</div>
+
+			<div id="center" class="area"></div>
+			
+		</div>
+
+		
+
+	</div>
+
+	<div id="by" style="display: none;"> by <a href="https://github.com/sharpmario" target="_blank" > Mário S. Sousa</a></div>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	
+
+	<script type="text/javascript">
+		
+	</script>
+
+</body>
+
+
+
+</html>
+
