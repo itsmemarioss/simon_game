@@ -84,6 +84,9 @@
 			border-bottom-right-radius: 100%;
 		}
 
+		.pressed{
+			filter: brightness(70%);
+		}
 		
 
 		.area{
@@ -113,17 +116,21 @@
 
 		<div id="wrap">
 			<div class="top">
-				<div id="first" class="area"></div>
-				<div id="second" class="area"></div>	
+				<div id="first" class="area" data-number="1"></div>
+				<div id="second" class="area" data-number="2"></div>	
 			</div>
 			<div class="bottom">
-				<div id="third" class="area"></div>
-				<div id="fourth" class="area"></div>	
+				<div id="third" class="area" data-number="3"></div>
+				<div id="fourth" class="area" data-number="4"></div>	
 			</div>
 
-			<div id="center" class="area"></div>
+			<div id="center" class="area">
+				
+			</div>
 			
 		</div>
+
+		<button id="start">Start</button>
 
 		
 
@@ -135,6 +142,84 @@
 	
 
 	<script type="text/javascript">
+
+		var moves = new Array();
+		var playing = true;
+		var player = 'C';
+
+		function random() {
+		    return Math.floor((Math.random() * 4) + 1);
+		}
+
+		function sleep(ms){
+			return new Promise(resolve => setTimeout(resolve, ms));
+		}
+
+		function getItemByNumber(number){
+			return $('*[data-number="'+number+'"]');
+		}
+
+		async function computerPlay(number){
+			playPrevousMoves();
+
+
+			div = getItemByNumber(number);
+			div.mousedown();
+
+			moves.push(number);
+			await sleep(1000);
+
+			div.mouseup();
+		}
+
+		function playPrevousMoves(){
+			moves.forEach(function(item){
+				console.log(item);
+				
+				div = getItemByNumber(item);
+				
+				div.mousedown();				
+
+				div.mouseup();
+
+			});
+		}
+
+		function play(div, number){
+			if(player==='C'){
+				computerPlay(random());
+				
+			}else{
+
+			}
+			
+			//alert(number);
+		};
+
+		$(function(){
+			$("#first, #second, #third, #fourth").click(function(){
+				if(playing)
+					play($(this), $(this).data("number"));
+
+			});
+
+			$("#first, #second, #third, #fourth").mousedown(function(){
+				$(this).addClass("pressed");
+				
+			});
+
+			$("#first, #second, #third, #fourth").mouseup(function(){
+				$(this).removeClass("pressed");
+			});
+
+			$("#start").click(function(){
+				computerPlay(random());
+
+			});
+
+		});
+
+		
 		
 	</script>
 
