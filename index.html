@@ -144,7 +144,8 @@
 	<script type="text/javascript">
 
 		var moves = new Array();
-		var playing = true;
+		var humanMoves = 0;
+		var playing = false;
 		var player = 'C';
 
 		function random() {
@@ -160,8 +161,11 @@
 		}
 
 		async function computerPlay(number){
-			playPrevousMoves();
+			player='H';
 
+			console.log('INFO - computer playing...')
+			
+			playPrevousMoves();
 
 			div = getItemByNumber(number);
 			div.mousedown();
@@ -170,11 +174,16 @@
 			await sleep(1000);
 
 			div.mouseup();
+			console.log('INFO - computer chose '+number);
+			console.log('INFO - Human it is your turn...');
 		}
 
+
 		function playPrevousMoves(){
+			console.log('INFO - previous moves played...')
+
 			moves.forEach(function(item){
-				console.log(item);
+				console.log(' -> '+item);
 				
 				div = getItemByNumber(item);
 				
@@ -185,21 +194,47 @@
 			});
 		}
 
-		function play(div, number){
+		function endsGame(){
+			playing = false;
+			alert('You lose! :(');
+		}
+
+		async function play(div){
 			if(player==='C'){
 				computerPlay(random());
 				
 			}else{
+				console.log('INFO - Human playing...');
 
+				//a pessoa precisa jogar a quantidade de vezes do computador
+				console.log('INFO - Human chose '+$(div).data("number"));
+
+				if($(div).data("number") != moves[humanMoves]){
+					endsGame();
+				}
+
+				humanMoves++;
+				console.log('INFO - Human has played '+humanMoves+' time(s)');
+				await sleep(1000);
+
+				if(humanMoves == moves.length){
+					player='C';
+					humanMoves = 0;
+					console.log('INFO - Computer it is your turn...');	
+					play();
+				}
+				
+				
 			}
 			
-			//alert(number);
 		};
 
 		$(function(){
 			$("#first, #second, #third, #fourth").click(function(){
 				if(playing)
-					play($(this), $(this).data("number"));
+					play($(this));
+				else
+					console.log('INFO - Please, start a new game...');
 
 			});
 
@@ -213,8 +248,8 @@
 			});
 
 			$("#start").click(function(){
-				computerPlay(random());
-
+				playing = true;
+				play(random());
 			});
 
 		});
