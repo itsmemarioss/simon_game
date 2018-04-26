@@ -21,8 +21,7 @@
    
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
@@ -120,12 +119,20 @@
 
 		<div id="wrap">
 			<div class="top">
-				<div id="first" class="area" data-number="1"></div>
-				<div id="second" class="area" data-number="2"></div>	
+				<div id="first" class="area" data-number="1">
+					<audio src="https://s3.amazonaws.com/freecodecamp/simonSound1.mp3" type="audio/mpeg"></audio>
+				</div>
+				<div id="second" class="area" data-number="2">
+					<audio src="https://s3.amazonaws.com/freecodecamp/simonSound2.mp3" type="audio/mpeg"></audio>
+				</div>	
 			</div>
 			<div class="bottom">
-				<div id="third" class="area" data-number="3"></div>
-				<div id="fourth" class="area" data-number="4"></div>	
+				<div id="third" class="area" data-number="3">
+					<audio src="https://s3.amazonaws.com/freecodecamp/simonSound4.mp3" type="audio/mpeg"></audio>
+				</div>
+				<div id="fourth" class="area" data-number="4">
+					<audio src="https://s3.amazonaws.com/freecodecamp/simonSound4.mp3" type="audio/mpeg"></audio>
+				</div>
 			</div>
 
 			<div id="center" class="area">
@@ -289,11 +296,12 @@
 
 			$("#first, #second, #third, #fourth").mousedown(function(){
 				$(this).addClass("pressed");
-				
+				$(this).children("audio").trigger("play");
 			});
 
 			$("#first, #second, #third, #fourth").mouseup(function(){
 				$(this).removeClass("pressed");
+				$(this).children("audio").trigger("pause");
 			});
 
 			$("#start").click(function(){
