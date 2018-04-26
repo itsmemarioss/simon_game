@@ -104,8 +104,12 @@
 			left: 116px;
 			
 			background-color: white;
-			
 		}
+
+		#steps{
+			font-size: 50px;
+		}
+
 		
 
 	</style>
@@ -125,6 +129,8 @@
 			</div>
 
 			<div id="center" class="area">
+				<div>Simon</div>
+				<div id="steps"></div>
 				
 			</div>
 			
@@ -143,10 +149,17 @@
 
 	<script type="text/javascript">
 
+		//https://s3.amazonaws.com/freecodecamp/simonSound1.mp3
+		//https://s3.amazonaws.com/freecodecamp/simonSound2.mp3
+		//https://s3.amazonaws.com/freecodecamp/simonSound3.mp3
+		//https://s3.amazonaws.com/freecodecamp/simonSound4.mp3
+
 		var moves = new Array();
 		var humanMoves = 0;
 		var playing = false;
 		var player = 'C';
+		var strictMode = false;
+		var movesToWin = 5;
 
 		function random() {
 		    return Math.floor((Math.random() * 4) + 1);
@@ -160,12 +173,29 @@
 			return $('*[data-number="'+number+'"]');
 		}
 
+		async function showPreviousMoves(){
+			for(i = 0; i<moves.length;i++){
+				console.log(' -> '+moves[i]);
+				
+				div = getItemByNumber(moves[i]);
+				
+				div.mousedown();
+				await sleep(1000);
+				div.mouseup();
+				await sleep(1000);
+
+			}
+		}
+
 		async function computerPlay(number){
 			player='H';
 
-			console.log('INFO - computer playing...')
-			
-			playPrevousMoves();
+			$("#steps").html(moves.length+1);
+
+			console.log('INFO - computer playing...');
+			console.log('INFO - previous moves played...');
+
+			await showPreviousMoves();
 
 			div = getItemByNumber(number);
 			div.mousedown();
@@ -179,28 +209,19 @@
 		}
 
 
-		function playPrevousMoves(){
-			console.log('INFO - previous moves played...')
-
-			moves.forEach(function(item){
-				console.log(' -> '+item);
-				
-				div = getItemByNumber(item);
-				
-				div.mousedown();				
-
-				div.mouseup();
-
-			});
+		function win(){
+			alert('You won!');
+			endsGame();
 		}
+		
 
 		function endsGame(){
 			playing = false;
-			alert('You lose! :(');
 		}
 
 		async function play(div){
 			if(player==='C'){
+
 				computerPlay(random());
 				
 			}else{
@@ -209,25 +230,53 @@
 				//a pessoa precisa jogar a quantidade de vezes do computador
 				console.log('INFO - Human chose '+$(div).data("number"));
 
+				//got the wrong aswer
 				if($(div).data("number") != moves[humanMoves]){
-					endsGame();
+					if(strictMode){
+						endsGame();
+					}else{
+						humanMoves = 0;
+						await showPreviousMoves();
+					}
+					
+				}else{
+					humanMoves++;
+					console.log('INFO - Human has played '+humanMoves+' time(s)');
+					
+
+					if(humanMoves === movesToWin){
+						win();
+					}else if(humanMoves == moves.length){ //got the entire sequence correctly 
+						await sleep(1000);
+
+						player='C';
+						humanMoves = 0;
+						console.log('INFO - Computer it is your turn...');	
+						play();
+					}
+
+
+
 				}
 
-				humanMoves++;
-				console.log('INFO - Human has played '+humanMoves+' time(s)');
-				await sleep(1000);
-
-				if(humanMoves == moves.length){
-					player='C';
-					humanMoves = 0;
-					console.log('INFO - Computer it is your turn...');	
-					play();
-				}
+				
 				
 				
 			}
 			
 		};
+
+		function newGame(){
+			console.log('INFO - Starting a new game...');
+
+			player ='C'
+			playing = true;
+			moves = new Array();
+			humanMoves = 0;
+			strictMode = false;
+
+			play(random());
+		}
 
 		$(function(){
 			$("#first, #second, #third, #fourth").click(function(){
@@ -248,8 +297,7 @@
 			});
 
 			$("#start").click(function(){
-				playing = true;
-				play(random());
+				newGame();
 			});
 
 		});
