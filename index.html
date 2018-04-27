@@ -120,30 +120,31 @@
 		<div id="wrap">
 			<div class="top">
 				<div id="first" class="area" data-number="1">
-					<audio src="https://s3.amazonaws.com/freecodecamp/simonSound1.mp3" type="audio/mpeg"></audio>
+					<audio src="https://s3.amazonaws.com/freecodecamp/simonSound1.mp3" type="audio/mpeg" preload ></audio>
 				</div>
 				<div id="second" class="area" data-number="2">
-					<audio src="https://s3.amazonaws.com/freecodecamp/simonSound2.mp3" type="audio/mpeg"></audio>
+					<audio src="https://s3.amazonaws.com/freecodecamp/simonSound2.mp3" type="audio/mpeg" preload ></audio>
 				</div>	
 			</div>
 			<div class="bottom">
 				<div id="third" class="area" data-number="3">
-					<audio src="https://s3.amazonaws.com/freecodecamp/simonSound4.mp3" type="audio/mpeg"></audio>
+					<audio src="https://s3.amazonaws.com/freecodecamp/simonSound3.mp3" type="audio/mpeg" preload ></audio>
 				</div>
 				<div id="fourth" class="area" data-number="4">
-					<audio src="https://s3.amazonaws.com/freecodecamp/simonSound4.mp3" type="audio/mpeg"></audio>
+					<audio src="https://s3.amazonaws.com/freecodecamp/simonSound4.mp3" type="audio/mpeg" preload ></audio>
 				</div>
 			</div>
 
 			<div id="center" class="area">
 				<div>Simon</div>
-				<div id="steps"></div>
+				<div id="steps">0</div>
+				<input type="checkbox" id="strictMode" checked>Strict Mode</input>
 				
 			</div>
 			
 		</div>
 
-		<button id="start">Start</button>
+		<button id="start">(Re)Start</button>
 
 		
 
@@ -156,17 +157,11 @@
 
 	<script type="text/javascript">
 
-		//https://s3.amazonaws.com/freecodecamp/simonSound1.mp3
-		//https://s3.amazonaws.com/freecodecamp/simonSound2.mp3
-		//https://s3.amazonaws.com/freecodecamp/simonSound3.mp3
-		//https://s3.amazonaws.com/freecodecamp/simonSound4.mp3
-
 		var moves = new Array();
 		var humanMoves = 0;
 		var playing = false;
 		var player = 'C';
-		var strictMode = false;
-		var movesToWin = 5;
+		var movesToWin = 20;
 
 		function random() {
 		    return Math.floor((Math.random() * 4) + 1);
@@ -224,9 +219,11 @@
 
 		function endsGame(){
 			playing = false;
+			$("#steps").html("0");
 		}
 
 		async function play(div){
+			
 			if(player==='C'){
 
 				computerPlay(random());
@@ -239,10 +236,12 @@
 
 				//got the wrong aswer
 				if($(div).data("number") != moves[humanMoves]){
-					if(strictMode){
+					if($("#strictMode").prop("checked")){
+						alert('Wrong answer, please start again!');
 						endsGame();
 					}else{
 						humanMoves = 0;
+						alert('Wrong answer, pay attention!');
 						await showPreviousMoves();
 					}
 					
@@ -260,14 +259,10 @@
 						humanMoves = 0;
 						console.log('INFO - Computer it is your turn...');	
 						play();
+						
 					}
 
-
-
 				}
-
-				
-				
 				
 			}
 			
@@ -280,32 +275,38 @@
 			playing = true;
 			moves = new Array();
 			humanMoves = 0;
-			strictMode = false;
 
 			play(random());
 		}
 
 		$(function(){
 			$("#first, #second, #third, #fourth").click(function(){
-				if(playing)
+				if(playing){
+					
 					play($(this));
-				else
+
+				}else{
 					console.log('INFO - Please, start a new game...');
+				}
+
 
 			});
 
 			$("#first, #second, #third, #fourth").mousedown(function(){
-				$(this).addClass("pressed");
 				$(this).children("audio").trigger("play");
+				$(this).addClass("pressed");
 			});
 
 			$("#first, #second, #third, #fourth").mouseup(function(){
 				$(this).removeClass("pressed");
-				$(this).children("audio").trigger("pause");
 			});
 
 			$("#start").click(function(){
 				newGame();
+			});
+
+			$("audio").on("ended",function(){
+				$(this).prop("currentTime",0);
 			});
 
 		});
